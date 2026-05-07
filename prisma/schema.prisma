@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  telegram_id  BigInt   @unique
+  username     String?
+  storage_used Int      @default(0)
+  storage_limit Int     @default(1073741824)
+  created_at   DateTime @default(now())
+  files        File[]
+}
+
+model File {
+  id          String   @id @default(cuid())
+  storage_key String   @unique
+  filename    String
+  mime_type   String
+  size        Int
+  hash        String?
+  created_at  DateTime @default(now())
+  expires_at  DateTime?
+  is_public   Boolean  @default(true)
+  owner_id    String?
+  owner       User?    @relation(fields: [owner_id], references: [id])
+  links       Link[]
+}
+
+model Link {
+  id         String   @id @default(cuid())
+  file_id    String
+  url_slug   String   @unique
+  password   String?
+  expires_at DateTime?
+  created_at DateTime @default(now())
+  click_count Int     @default(0)
+  file       File     @relation(fields: [file_id], references: [id])
+}
