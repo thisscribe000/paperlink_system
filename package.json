@@ -4,11 +4,14 @@
   "type": "module",
   "scripts": {
     "dev": "bun run src/index.ts",
-    "build": "bun build src/index.ts --outdir dist --target bun",
+    "build": "wrangler deploy --dry-run",
+    "build:local": "bun build src/index.ts --outdir dist --target bun",
     "start": "bun run src/index.ts",
     "db:push": "bunx prisma db push",
     "db:studio": "bunx prisma studio",
-    "test": "bun test"
+    "cleanup": "bun run src/workers/cleanup.ts",
+    "test": "bun test",
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@hono/node-server": "^2.0.1",
@@ -22,6 +25,7 @@
     "typescript": "^5.0.0",
     "prisma": "^5.0.0",
     "@types/bun": "^1.0.0",
-    "@types/bcrypt": "^5.0.0"
+    "@types/bcrypt": "^5.0.0",
+    "@cloudflare/workers-types": "^4.20241127.0"
   }
 }

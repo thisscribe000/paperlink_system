@@ -1,6 +1,6 @@
 import { Bot } from 'grammy'
 import { generateSlug } from '../utils/id'
-import { saveFile } from '../storage/engine'
+import { saveFile } from '../storage'
 import { db } from '../db'
 
 const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN || '')

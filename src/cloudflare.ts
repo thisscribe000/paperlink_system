@@ -12,7 +12,7 @@ app.use('*', cors())
 app.get('/', (c) => c.json({ 
   status: 'ok', 
   service: 'PaperLink Storage',
-  environment: 'node'
+  environment: 'cloudflare'
 }))
 
 app.route('/upload', uploadRoute)
@@ -20,11 +20,4 @@ app.route('/api/files', filesRoute)
 app.route('/api/links', linksRoute)
 app.route('/f', serveFileRoute)
 
-const port = parseInt(process.env.PORT || '3000')
-console.log(`🚀 PaperLink Storage running on port ${port}`)
-
-const server = Bun.serve({
-  port,
-  fetch: app.fetch,
-})
-console.log(`Server started on ${server.hostname}:${server.port}`)
+export default app

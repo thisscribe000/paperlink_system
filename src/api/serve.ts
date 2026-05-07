@@ -1,6 +1,8 @@
 import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client'
-import { getFileBuffer } from '../storage/engine'
+import { getFileBuffer } from '../storage'
+import { trackDownload } from '../utils/analytics'
+import { verifySignedUrl } from '../utils/signed-url'
 
 const db = new PrismaClient()
 
@@ -26,10 +28,20 @@ serveFileRoute.get('/:slug', async (c) => {
     }
   }
 
+  const signedExpires = c.req.query('expires')
+  const signedSignature = c.req.query('signature')
+  if (signedExpires && signedSignature) {
+    if (!verifySignedUrl(slug, signedExpires, signedSignature)) {
+      return c.json({ error: 'Invalid or expired signed URL' }, 403)
+    }
+  }
+
   await db.link.update({
     where: { id: link.id },
     data: { click_count: { increment: 1 } },
   })
+
+  await trackDownload(link.file_id)
 
   const file = await db.file.findUnique({ where: { id: link.file_id } })
 

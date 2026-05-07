@@ -1,7 +1,8 @@
 import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client'
 import { generateSlug } from '../utils/id'
-import { saveFile } from '../storage/engine'
+import { saveFile } from '../storage'
+import { trackUpload } from '../utils/analytics'
 
 const db = new PrismaClient()
 
@@ -43,6 +44,8 @@ uploadRoute.post('/', async (c) => {
         url_slug,
       },
     })
+
+    await trackUpload(fileRecord.owner_id || 'anonymous', size)
 
     const base_url = process.env.BASE_URL || 'http://localhost:3000'
 

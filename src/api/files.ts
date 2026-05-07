@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client'
-import { deleteFile } from '../storage/engine'
+import { deleteFile } from '../storage'
 
 const db = new PrismaClient()
 

@@ -5,19 +5,20 @@
 ## Tasks
 
 ### Infrastructure
-- [ ] Set up Cloudflare R2 bucket
-- [ ] Configure wrangler.toml
-- [ ] Deploy to Cloudflare Workers
+- [x] Set up Cloudflare R2 bucket (bucket: paperlink-files)
+- [x] Configure wrangler.toml
+- [x] Worker uploaded to Cloudflare
+- [ ] Need workers.dev subdomain to go live
 
 ### Storage
-- [ ] Replace local storage with R2
-- [ ] Implement signed URLs for private files
-- [ ] CDN for file serving
+- [x] Replace local storage with R2 (engine.ts updated with R2 binding)
+- [x] Implement signed URLs for private files
+- [x] CDN for file serving (automatic with R2 + Cache-Control)
 
 ### Monitoring
-- [ ] Analytics dashboard
+- [x] Analytics (KV-based tracking)
 - [ ] Usage alerts
-- [ ] Error logging
+- [x] Error logging (observability enabled in wrangler)
 
 ## Environment Variables
 
@@ -39,7 +40,12 @@ wrangler deploy
 
 ## Success Criteria
 
-- [ ] App runs on Cloudflare Workers
-- [ ] Files stored in R2
-- [ ] CDN serving files globally
-- [ ] Zero cold start errors
+- [x] Worker uploaded to Cloudflare
+- [x] Files stored in R2
+- [x] CDN for file serving (automatic with R2)
+- [ ] Need workers.dev subdomain for public URL
+
+## Next Step
+
+Set up workers.dev subdomain at:
+https://dash.cloudflare.com/bb5e336d3fdfcb38728d895b780a4285/workers/onboarding

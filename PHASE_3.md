@@ -42,8 +42,8 @@ Background job to:
 
 ## Success Criteria
 
-- [ ] Can create expiring link
-- [ ] Expired links return 410
-- [ ] Password-protected links work
-- [ ] Storage usage tracked per user
-- [ ] Cleanup worker runs daily
+- [x] Can create expiring link
+- [x] Expired links return 410
+- [x] Password-protected links work
+- [x] Storage usage tracked per user
+- [x] Cleanup worker runs daily

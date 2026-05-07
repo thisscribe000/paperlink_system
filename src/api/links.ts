@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client'
 import { generateSlug } from '../utils/id'
+import { createSignedUrl } from '../utils/signed-url'
 
 const db = new PrismaClient()
 
@@ -50,4 +51,23 @@ linksRoute.delete('/:id', async (c) => {
   const id = c.req.param('id')
   await db.link.delete({ where: { id } })
   return c.json({ success: true })
+})
+
+linksRoute.post('/signed', async (c) => {
+  try {
+    const { url_slug, expires_in } = await c.req.json()
+
+    const link = await db.link.findUnique({ where: { url_slug } })
+    if (!link) {
+      return c.json({ error: 'Link not found' }, 404)
+    }
+
+    const expiresSeconds = parseInt(expires_in) || 3600
+    const signedUrl = createSignedUrl(url_slug, expiresSeconds)
+
+    return c.json({ signed_url: signedUrl, expires_in: expiresSeconds })
+  } catch (error) {
+    console.error('Signed URL error:', error)
+    return c.json({ error: 'Failed to create signed URL' }, 500)
+  }
 })
