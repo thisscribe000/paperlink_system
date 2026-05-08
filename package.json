@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun run src/index.ts",
+    "dev:tunnel": "cloudflared tunnel --url localhost:3000",
     "build": "wrangler deploy --dry-run",
     "build:local": "bun build src/index.ts --outdir dist --target bun",
     "start": "bun run src/index.ts",

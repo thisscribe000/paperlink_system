@@ -7,6 +7,12 @@ const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN || '')
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000'
 
+bot.catch((err) => {
+  console.error('Bot error:', err.message)
+})
+
+const MAX_FILE_SIZE = 20 * 1024 * 1024 // 20MB
+
 bot.command('start', async (ctx) => {
   await ctx.reply(
     `📦 *PaperLink Storage*\n\n`
@@ -115,6 +121,11 @@ bot.on('message', async (ctx) => {
   const msg = ctx.message
 
   if (msg.photo) {
+    const photo = msg.photo[msg.photo.length - 1]
+    if (photo.file_size && photo.file_size > MAX_FILE_SIZE) {
+      await ctx.reply('⚠️ File too large! Telegram limits downloads to 20MB.')
+      return
+    }
     await ctx.reply('📸 Processing photo...')
     const file = await ctx.getFile()
     const buffer = await downloadFile(file.file_path)
@@ -152,6 +163,10 @@ bot.on('message', async (ctx) => {
     )
   }
   else if (msg.document) {
+    if (msg.document.file_size && msg.document.file_size > MAX_FILE_SIZE) {
+      await ctx.reply('⚠️ File too large! Telegram limits downloads to 20MB.')
+      return
+    }
     await ctx.reply('📄 Processing document...')
     const doc = msg.document
     const file = await ctx.getFile()

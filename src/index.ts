@@ -4,6 +4,7 @@ import { uploadRoute } from './api/upload'
 import { filesRoute } from './api/files'
 import { linksRoute } from './api/links'
 import { serveFileRoute } from './api/serve'
+import { startBot } from './bot'
 
 const app = new Hono()
 
@@ -28,3 +29,5 @@ const server = Bun.serve({
   fetch: app.fetch,
 })
 console.log(`Server started on ${server.hostname}:${server.port}`)
+
+startBot()
